@@ -1,7 +1,19 @@
+import os
+import re
+import json
+from pathlib import Path
 from spotdl import Spotdl
 from spotdl.utils.config import DOWNLOADER_OPTIONS, get_config
 from spotdl.utils.formatter import create_file_name
+from spotdl.utils.m3u import create_m3u_file
+from spotdl.types.playlist import Playlist
 
+def get_music(json_file_name="music.json"):
+    with open(json_file_name) as file:
+        file_data = json.load(file)
+        return file_data
+
+user_music = dict(get_music())
 user_config = get_config()
 
 download_options = DOWNLOADER_OPTIONS.copy()
@@ -18,20 +30,45 @@ spotdl = Spotdl(
         downloader_settings=download_options,
         )
 
-songs = spotdl.search(['joji - test drive',
-    'https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT'])
+total_songs = list()
 
-results = spotdl.download_songs(songs)
+for songs in user_music.values():
+    total_songs += songs
+
+song_info = spotdl.search(total_songs)
+
+spotdl.download_songs(song_info)
+
+for playlist_url in user_music["playlists"]:
+    playlist = Playlist.from_url(playlist_url)
+    create_m3u_file(
+        file_name=f"playlist.name.m3u",
+        song_list=playlist.songs,
+        template="",
+        file_extension=download_options['format'],
+    )
 
 song_file_names = list()
-for song in songs:
-    song_file_names.append(
-        str(create_file_name(
+for song in song_info:
+    song_file_names.append(str(
+        create_file_name(
             song=song,
             template=download_options['output'],
             file_extension=download_options['format'],
             short=False
-        ))
-    )
+        )
+    ))
 
-print(song_file_names)
+file_in_dir = os.listdir()
+
+music_file_re = re.compile('^.*\.(mp3|flac|ogg|opus|m4a|wav)$')
+
+file_in_dir = [
+        i for i in file_in_dir 
+        if bool(music_file_re.search(i)) == True and i not in song_file_names
+    ]
+ 
+print(f"Deleting {file_in_dir}")
+
+for i in file_in_dir:
+    os.remove(i)

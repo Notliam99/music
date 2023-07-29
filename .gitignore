@@ -5,6 +5,7 @@
 *.opus
 *.m4a
 *.wav
+*.m3u
 # - - - - - - - Python - - - - - - - #
 
 # Byte-compiled / optimized / DLL files

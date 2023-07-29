@@ -1,3 +1,11 @@
 {
-  "album": "https://open.spotify.com/album/3vi20DRHkqv4HyVg9Rt9wC?si=ZO4f0pegQBqdc1_WqM8jYw"
+  "playlists": [
+    "https://open.spotify.com/playlist/7d416QUN92gVaKD7nYz8sb?si=361b76646bc64a82"
+  ],
+  "albums": [
+    "https://open.spotify.com/album/3vi20DRHkqv4HyVg9Rt9wC?si=ZO4f0pegQBqdc1_WqM8jYw"
+  ],
+  "songs": [
+    "https://open.spotify.com/track/6RyEMCk0647QCrdr7SzIzK?si=f6ce0edf94cd43cf"
+  ]
 }
