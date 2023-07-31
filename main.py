@@ -49,7 +49,7 @@ for playlist_url in user_music["playlists"]:
     create_m3u_file(
         file_name=f"{playlist.name}.m3u",
         song_list=playlist.songs,
-        template="",
+        template=f"A:\{download_options['output']}",
         file_extension=download_options['format'],
     )
 
